@@ -5,16 +5,25 @@ const fetchWeather = async (location, imperialUnit) => {
     location = location.replace(/ +(?= )/g,'').trim();
 
     const weatherPromise = fetch(URL + 'weather?q=' + location + '&units=' + unit + APIKEY)
-    .then(r => r.json());
+    .then(r => {
+        if (!r.ok) {
+            throw Error(r.statusText);
+        } else {
+            return r.json()
+        }
+    })
 
     const forecastPromise = fetch(URL + 'forecast/?q=' + location + '&units=' + unit + APIKEY)
-    .then(r => r.json())
+    .then(r => {
+        if (!r.ok) {
+            throw Error(r.statusText);
+        } else {
+            return r.json()
+        }
+    })
 
     const [weather, forecast] = await Promise.all([weatherPromise, forecastPromise])
-    if (!weather.ok || !forecast.ok){
-        throw new Error('Something whent wrong')
-    }
-    
+ 
     return {weather, forecast};
 }
 
