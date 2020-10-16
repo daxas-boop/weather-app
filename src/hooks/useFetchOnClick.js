@@ -20,23 +20,20 @@ const fetchReducer = (state, action) => {
 export const useFetchOnClick = (fetchFunction, searchInput, imperialUnit) => {
     const [state, dispatch] = useReducer(fetchReducer, initialState);
 
-    const onClick = async() => {
-        if(searchInput){
-            dispatch({ type: 'LOAD' });
-            try {
-                const response = await fetchFunction(searchInput, imperialUnit);
-                dispatch({ type: 'SUCCESS', payload:response })
-                console.log(response)
-            } catch(error) {
-                dispatch({type: 'ERROR', payload:error})
+    useEffect(() => {
+        const fetchWeather = async () => {
+            if(searchInput){
+                dispatch({ type: 'LOAD' });
+                try {
+                    const response = await fetchFunction(searchInput, imperialUnit);
+                    dispatch({ type: 'SUCCESS', payload:response })
+                }catch(error){
+                    dispatch({type: 'ERROR', payload:error})
+                }
             }
-        }
-    }
-    
-    const onChangeUnit = async() => {
-        
-        
-    }
+        };
+        fetchWeather();
+    }, [fetchFunction, searchInput, imperialUnit])
 
-    return {state, onClick, onChangeUnit}
+    return state;
 }
