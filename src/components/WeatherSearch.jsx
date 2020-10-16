@@ -4,7 +4,7 @@ import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
 import { useFetchOnClick } from '../hooks/useFetchOnClick';
 import fetchWeather from '../weather-fetch';
-import Loading from'./Loading';
+import Loading from './Loading/Loading';
 import Forecast from './Forecast';
 import WeatherCard from './WeatherCard';
 
@@ -60,14 +60,14 @@ const WeatherSearch = () => {
     }
 
     useEffect(() => {
-        console.log(data)
-    }, [data])
+        console.log(error)
+    }, [error])
 
     return (
         <Container>
             <SearchForm onSubmit={ (e) => {e.preventDefault();} }>
                 <label>Search city</label>
-                <input type='text' onChange={(e) => setInput(e.target.value) } value={input} />
+                <input type='text' onChange={(e) => {setInput(e.target.value)}} value={input} />
                 <SearchButton 
                     onClick={ () => setSearchTerm(input) }
                 >Search</SearchButton>
@@ -76,12 +76,10 @@ const WeatherSearch = () => {
             <SwitchContainer>
                 <Grid item>F°</Grid>
                 <Grid item>
-                    <Switch onChange={ handleUnitChange } value={imperialUnit} color="default" />
+                    <Switch onChange={() => {handleUnitChange()} } value={imperialUnit} color="default" />
                 </Grid>
                 <Grid item>C°</Grid>
             </SwitchContainer>
-            
-
             {loading && <Loading/>}
             {error && <h1>Error</h1>}
             {data &&
