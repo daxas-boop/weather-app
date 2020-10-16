@@ -9,18 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import clsx from 'clsx';
 
-const Container = styled(Grid) `
-    max-width:100%;
-    margin-top:20px;
-`
-
-const Day = styled(Paper) `
-    width:200px;
-    text-align:center;
-    background-color:blue;
-    padding:10px;
-`
-
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -47,6 +35,27 @@ const useStyles = makeStyles((theme) => ({
     marginTop:20,
   }
 }));
+
+const Container = styled(Grid) `
+    max-width:100%;
+    margin-top:20px;
+`
+
+const Day = styled(Paper) `
+    width:200px;
+    text-align:center;
+    background-color:blue;
+    padding:10px;
+`
+
+const WeatherIcon = styled.img `
+    width:50px;
+`
+
+const HourlyContainer = styled.div `
+    display: flex;
+    justify-content:space-around;
+`
 
 const Forecast = (props) => {
     const classes = useStyles();
@@ -75,9 +84,6 @@ const Forecast = (props) => {
 
     const unit = imperialUnit ? 'F°' : 'C°';
 
-    // needs mapping
-    console.log(days);
-    
     return (
         <Container
             className={classes.container}
@@ -88,37 +94,35 @@ const Forecast = (props) => {
             spacing={4}
             m={2}
         >
-            {days.map(
-                (day,index) => 
+            {days.map( (day,index) => 
                 <Grid key={day[0].dt_txt} item>
                     <Day elevation={3}>
                         <h2>{day[0].dt_txt.substr(0,day[0].dt_txt.indexOf(' '))}</h2>
                         {day.slice(0,3).map(hour =>
-                            <div key={hour.dt_txt} style={{display:'flex'}}>
-                                <p>{hour.dt_txt.substr(hour.dt_txt.indexOf(' ')+1)}</p>
+                            <HourlyContainer key={hour.dt_txt}>
+                                <p>{hour.dt_txt.substr(hour.dt_txt.indexOf(' ')+1).split(':',2).join(':')}</p>
                                 <p>{hour.main.temp} {unit}</p>
-                                <img 
+                                <WeatherIcon
                                     src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`} 
                                     alt={hour.weather[0].main}>    
-                                </img>
-                            </div>
+                                </WeatherIcon>
+                            </HourlyContainer>
                         )}
                         <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
                             {day.slice(3).map(hour =>
-                                <div key={hour.dt_txt + 'hidden'} style={{display:'flex'}}>
-                                    <p>{hour.dt_txt.substr(hour.dt_txt.indexOf(' ')+1)}</p>
+                                <HourlyContainer key={hour.dt_txt + 'hidden'}>
+                                    <p>{hour.dt_txt.substr(hour.dt_txt.indexOf(' ')+1).split(':',2).join(':')}</p>
                                     <p>{hour.main.temp} {unit}</p>
-                                    <img 
+                                    <WeatherIcon 
                                         src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`} 
                                         alt={hour.weather[0].main}>    
-                                    </img>
-                                </div>
+                                    </WeatherIcon>
+                                </HourlyContainer>
                             )}
                         </Collapse>
                          <IconButton
                             className={clsx(classes.expand, {
-                            [classes.expandOpen]: expanded[index],
-                            })}
+                            [classes.expandOpen]: expanded[index],})}
                             onClick={() => handleExpandClick(index)}
                             aria-expanded={expanded[index]}
                             aria-label="show more"
