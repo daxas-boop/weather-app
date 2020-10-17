@@ -17,7 +17,7 @@ const fetchReducer = (state, action) => {
     }
 }
 
-export const useFetchOnClick = (fetchFunction, searchInput, imperialUnit) => {
+export const useFetchOnClick = (fetchFunction, searchInput, imperialUnit, geolocation) => {
     const [state, dispatch] = useReducer(fetchReducer, initialState);
 
     useEffect(() => {
@@ -25,7 +25,16 @@ export const useFetchOnClick = (fetchFunction, searchInput, imperialUnit) => {
             if(searchInput){
                 dispatch({ type: 'LOAD' });
                 try {
-                    const response = await fetchFunction(searchInput, imperialUnit);
+                    const response = await fetchFunction(null, searchInput, imperialUnit);
+                    dispatch({ type: 'SUCCESS', payload:response })
+                }catch(error){
+                    dispatch({type: 'ERROR', payload:error})
+                }
+            }
+            if(geolocation && !searchInput){
+                dispatch({ type: 'LOAD' });
+                try {
+                    const response = await fetchFunction(geolocation, null, imperialUnit);
                     dispatch({ type: 'SUCCESS', payload:response })
                 }catch(error){
                     dispatch({type: 'ERROR', payload:error})
@@ -33,7 +42,7 @@ export const useFetchOnClick = (fetchFunction, searchInput, imperialUnit) => {
             }
         };
         fetchWeather();
-    }, [fetchFunction, searchInput, imperialUnit])
+    }, [fetchFunction, searchInput, imperialUnit, geolocation])
 
     return state;
 }
