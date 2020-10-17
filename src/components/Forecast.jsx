@@ -77,7 +77,7 @@ const Forecast = (props) => {
     }
 
     function getIcon (icon){
-        return `http://openweathermap.org/img/wn/${icon}@2x.png`
+        return `https://openweathermap.org/img/wn/${icon}@2x.png`
     }
 
     function capitalizeFirstLetter(string) {

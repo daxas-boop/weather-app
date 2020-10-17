@@ -23,7 +23,7 @@ const WeatherCard = (props) => {
         main: {temp_max}
     } = currentWeather
 
-    const iconSrc = `http://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`
+    const iconSrc = `https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`
     const unit = imperialUnit ? 'F°' : 'C°';
 
     return (
