@@ -10,7 +10,7 @@ const Container = styled(Paper) `
 `
 
 const WeatherCard = (props) => {
-    const {weather, imperialUnit} = props;
+    const {currentWeather, imperialUnit} = props;
     
     const{
         name: city,
@@ -21,9 +21,9 @@ const WeatherCard = (props) => {
         main: {humidity},
         main: {temp_min},
         main: {temp_max}
-    } = weather
+    } = currentWeather
 
-    const iconSrc = `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
+    const iconSrc = `http://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`
     const unit = imperialUnit ? 'F°' : 'C°';
 
     return (
