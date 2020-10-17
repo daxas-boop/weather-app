@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
 import { useFetchOnClick } from '../hooks/useFetchOnClick';
-import fetchWeather from '../weather-fetch';
 import Loading from './Loading/Loading';
 import Forecast from './Forecast';
 import WeatherCard from './WeatherCard';
+import fetchFunction from '../weather-fetch-geo';
 
 const Container = styled.section `
     margin:0 auto;
@@ -14,8 +14,9 @@ const Container = styled.section `
     display:flex;
     flex-direction: column;
     font-family:'Roboto';
-    background-color:#eee;
     position:relative;
+    background-color: #8EC5FC;
+    background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
 `
 
 const SearchForm = styled.form `
@@ -47,21 +48,28 @@ const SwitchContainer = styled.label `
     left:15px;
 `
 
-
-
 const WeatherSearch = () => {
     const [input, setInput] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [imperialUnit, setimperialUnit] = useState(true);
-    const { data, loading, error } = useFetchOnClick(fetchWeather, searchTerm, imperialUnit);
+    const [geolocation, setGeolocation] = useState('');
+    const { data, loading, error } = useFetchOnClick(fetchFunction, searchTerm, imperialUnit, geolocation);
 
     function handleUnitChange() {
         setimperialUnit(!imperialUnit);
     }
 
+    function successGeo(pos) {
+        setGeolocation([pos.coords.latitude, pos.coords.longitude])
+    }
+
+    function errorGeo(e) {
+        console.log(e)
+    }
+
     useEffect(() => {
-        console.log(error)
-    }, [error])
+        navigator.geolocation.getCurrentPosition(successGeo, errorGeo)
+    }, [])
 
     return (
         <Container>
@@ -85,7 +93,7 @@ const WeatherSearch = () => {
             {data &&
                 <>
                     <WeatherCard
-                        weather = {data.weather}
+                        currentWeather = {data.currentWeather}
                         imperialUnit = {imperialUnit}
                     />
                     <Forecast 
