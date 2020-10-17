@@ -1,35 +1,10 @@
-import React,{useEffect,useState} from 'react'
+import React from 'react'
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import styled from '@emotion/styled';
 import { makeStyles } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
-import Collapse from '@material-ui/core/Collapse';
-import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
   container:{
     margin:0,
     marginTop:20,
@@ -48,39 +23,66 @@ const Day = styled(Paper) `
     padding:10px;
 `
 
-const WeatherIcon = styled.img `
+const DateDay = styled.span `
+    display:flex;
+    justify-content:space-around;
+`
+
+const Data = styled.span `
+    display:flex;
+    justify-content:space-around;
+`
+
+const IconImage = styled.img `
     width:50px;
 `
 
-const HourlyContainer = styled.div `
-    display: flex;
-    justify-content:space-around;
+const IconDescription = styled.span `
+    display:flex;
+    justify-content:center;
+    margin-bottom:10px;
 `
 
 const Forecast = (props) => {
     const classes = useStyles();
     const {forecast, imperialUnit} = props;
-    const [days, setDays] = useState([]);
-    const [expanded, setExpanded] = useState({});
 
-    const handleExpandClick = (index) => {
-        expanded.hasOwnProperty(index) ? setExpanded({...expanded, [index]: !expanded[index]}) :
-        setExpanded({ ...expanded, [index]: true } )
-    };
-    
-    useEffect(() => {
-        // Split array into arrays of matching values. 
-        // So that way we can have an array for each day of the weak. Thank you stackoverflow.
-        let groupedByDate = Object.values(forecast.list
-        .reduce((acc, x)=>{
-            let arr = acc[x.dt_txt.substr(0,x.dt_txt.indexOf(' '))] || [];
-            arr.push(x);
-            acc[x.dt_txt.substr(0,x.dt_txt.indexOf(' '))] = arr;
-            return acc;
-        },{}));
+    function getDate (date) {
+        let d = new Date (date*1000)
+        const dayMonth = + (d.getMonth()+1) +'/' + d.getDate()
 
-        setDays(groupedByDate);
-    }, [forecast])
+        switch (d.getDay()) {
+            case 0:
+                return 'Sunday ' + dayMonth;
+            case 1:
+                return 'Monday ' + dayMonth;
+            case 2:
+                return 'Tuesday ' + dayMonth;
+            case 3:
+                return 'Wednesday ' + dayMonth;
+            case 4:
+                return 'Thursday ' + dayMonth;
+            case 5:
+                return 'Friday ' + dayMonth;
+            case 6:
+                return 'Saturday ' + dayMonth;
+            default:
+                break;
+        }
+    }
+
+    function getSunrise(sunrise) {
+        let d = new Date (sunrise*1000)
+        return d.getHours() + ':' + (d.getMinutes()<10?'0':'') + d.getMinutes()   
+    }
+
+    function getIcon (icon){
+        return `http://openweathermap.org/img/wn/${icon}@2x.png`
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
     const unit = imperialUnit ? 'F°' : 'C°';
 
@@ -94,42 +96,19 @@ const Forecast = (props) => {
             spacing={4}
             m={2}
         >
-            {days.map( (day,index) => 
-                <Grid key={day[0].dt_txt} item>
+            {forecast.daily.map( day => 
+                <Grid key={day.dt} item>
                     <Day elevation={3}>
-                        <h2>{day[0].dt_txt.substr(0,day[0].dt_txt.indexOf(' '))}</h2>
-                        {day.slice(0,3).map(hour =>
-                            <HourlyContainer key={hour.dt_txt}>
-                                <p>{hour.dt_txt.substr(hour.dt_txt.indexOf(' ')+1).split(':',2).join(':')}</p>
-                                <p>{hour.main.temp} {unit}</p>
-                                <WeatherIcon
-                                    src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`} 
-                                    alt={hour.weather[0].main}>    
-                                </WeatherIcon>
-                            </HourlyContainer>
-                        )}
-                        <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
-                            {day.slice(3).map(hour =>
-                                <HourlyContainer key={hour.dt_txt + 'hidden'}>
-                                    <p>{hour.dt_txt.substr(hour.dt_txt.indexOf(' ')+1).split(':',2).join(':')}</p>
-                                    <p>{hour.main.temp} {unit}</p>
-                                    <WeatherIcon 
-                                        src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`} 
-                                        alt={hour.weather[0].main}>    
-                                    </WeatherIcon>
-                                </HourlyContainer>
-                            )}
-                        </Collapse>
-                         <IconButton
-                            className={clsx(classes.expand, {
-                            [classes.expandOpen]: expanded[index],})}
-                            onClick={() => handleExpandClick(index)}
-                            aria-expanded={expanded[index]}
-                            aria-label="show more"
-                        >
-                            <ExpandMoreIcon />
-                        </IconButton>
-                     </Day>
+                        <DateDay>{getDate(day.dt)}</DateDay>
+                        <IconImage src={getIcon(day.weather[0].icon)} alt={day.weather[0].main} />
+                        <IconDescription>{capitalizeFirstLetter(day.weather[0].description)}</IconDescription>
+                        <Data>Max: {day.temp.max} {unit}</Data>
+                        <Data>Min: {day.temp.min} {unit}</Data>
+                        <Data>Humidity: {day.humidity}%</Data>
+                        <Data>Pressure: {day.pressure}</Data>
+                        <Data>Sunrise: {getSunrise(day.sunrise)}</Data>
+                        <Data>Sunset: {getSunrise(day.sunset)}</Data>
+                    </Day>
                 </Grid>
             )}
         </Container>
