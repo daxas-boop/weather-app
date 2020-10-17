@@ -23,7 +23,7 @@ const fetchFunction = async (geolocation, location, imperialUnit) => {
         lon = geolocation.longt;
     }
 
-    const URL = 'http://api.openweathermap.org/data/2.5/';
+    const URL = 'https://api.openweathermap.org/data/2.5/';
     const APIKEY = '30d2d7664fe7b2ac7e54fdca4bc7f915';
     const unit = imperialUnit ? 'imperial' : 'metric';
 
