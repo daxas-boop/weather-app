@@ -31,7 +31,13 @@ export const useFetchOnClick = (fetchFunction, searchInput, imperialUnit, geoloc
                     dispatch({type: 'ERROR', payload:error})
                 }
             }
-            if(geolocation && !searchInput){
+        };
+        fetchWeather();
+    }, [fetchFunction, searchInput, imperialUnit]);
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+            if(geolocation){
                 dispatch({ type: 'LOAD' });
                 try {
                     const response = await fetchFunction(geolocation, null, imperialUnit);
@@ -40,9 +46,9 @@ export const useFetchOnClick = (fetchFunction, searchInput, imperialUnit, geoloc
                     dispatch({type: 'ERROR', payload:error})
                 }
             }
-        };
+        }
         fetchWeather();
-    }, [fetchFunction, searchInput, imperialUnit, geolocation])
+    }, [fetchFunction, geolocation, imperialUnit])
 
     return state;
 }

@@ -19,18 +19,20 @@ const Container = styled(Grid) `
 const Day = styled(Paper) `
     width:200px;
     text-align:center;
-    background-color:blue;
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
     padding:10px;
 `
 
 const DateDay = styled.span `
     display:flex;
-    justify-content:space-around;
+    justify-content:center;
 `
 
 const Data = styled.span `
-    display:flex;
-    justify-content:space-around;
+    display: inline-block;
+    width:100%;
+    margin:2px 0;
 `
 
 const IconImage = styled.img `
@@ -41,6 +43,10 @@ const IconDescription = styled.span `
     display:flex;
     justify-content:center;
     margin-bottom:10px;
+`
+
+const DataContainer = styled.div `
+    text-align:center;
 `
 
 const Forecast = (props) => {
@@ -77,7 +83,7 @@ const Forecast = (props) => {
     }
 
     function getIcon (icon){
-        return `http://openweathermap.org/img/wn/${icon}@2x.png`
+        return `https://openweathermap.org/img/wn/${icon}@2x.png`
     }
 
     function capitalizeFirstLetter(string) {
@@ -102,12 +108,14 @@ const Forecast = (props) => {
                         <DateDay>{getDate(day.dt)}</DateDay>
                         <IconImage src={getIcon(day.weather[0].icon)} alt={day.weather[0].main} />
                         <IconDescription>{capitalizeFirstLetter(day.weather[0].description)}</IconDescription>
-                        <Data>Max: {day.temp.max} {unit}</Data>
-                        <Data>Min: {day.temp.min} {unit}</Data>
-                        <Data>Humidity: {day.humidity}%</Data>
-                        <Data>Pressure: {day.pressure}</Data>
-                        <Data>Sunrise: {getSunrise(day.sunrise)}</Data>
-                        <Data>Sunset: {getSunrise(day.sunset)}</Data>
+                        <DataContainer>
+                            <Data>Max: {day.temp.max} {unit}</Data>
+                            <Data>Min: {day.temp.min} {unit}</Data>
+                            <Data>Humidity: {day.humidity}%</Data>
+                            <Data>Pressure: {day.pressure}</Data>
+                            <Data>Sunrise: {getSunrise(day.sunrise)}</Data>
+                            <Data>Sunset: {getSunrise(day.sunset)}</Data>
+                        </DataContainer>
                     </Day>
                 </Grid>
             )}
