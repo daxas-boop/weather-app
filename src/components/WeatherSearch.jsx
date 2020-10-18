@@ -89,12 +89,12 @@ const WeatherSearch = () => {
     const [input, setInput] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [imperialUnit, setimperialUnit] = useState(true);
-    const [geolocation, setGeolocation] = useState('');
-    const { data, loading, error } = useFetchOnClick(fetchFunction, searchTerm, imperialUnit, geolocation);
+    const { data, loading, error } = useFetchOnClick(fetchFunction, searchTerm, imperialUnit);
     const classes = useStyles();
 
     function successGeo(pos) {
-        setGeolocation([pos.coords.latitude, pos.coords.longitude])
+        setSearchTerm([pos.coords.latitude, pos.coords.longitude])
+        console.log('test')
     }
 
     function errorGeo(e) {
@@ -107,7 +107,6 @@ const WeatherSearch = () => {
 
     function handleGeolocationClick(){
         navigator.geolocation.getCurrentPosition(successGeo, errorGeo);
-        setSearchTerm('')
     }
 
     function handleUnitChange() {
@@ -131,7 +130,7 @@ const WeatherSearch = () => {
                         type="submit" 
                         className={classes.iconButton} 
                         aria-label="search"
-                        onClick={ () => {setSearchTerm(input); setGeolocation(null)} }
+                        onClick={ () => {setSearchTerm(input)} }
                     >
                         <SearchIcon />
                     </IconButton>
@@ -161,7 +160,7 @@ const WeatherSearch = () => {
                     <>
                         <WeatherCard
                             currentWeather = {data.currentWeather}
-                            location = {data.geolocationFetch}
+                            location = {data.geolocation}
                             imperialUnit = {imperialUnit}
                         />
                         <Forecast 
