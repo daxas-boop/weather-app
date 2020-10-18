@@ -59,7 +59,8 @@ const SearchForm = styled(Paper) `
     align-items: center;
     width: 400px;
     @media (max-width:768px) {
-        margin-top:50px;
+        margin-top:75px;
+        width:310px;
     }
 `
 
@@ -67,8 +68,8 @@ const SwitchContainer = styled.label `
     display:flex;
     align-items:center;
     position:absolute;
-    top:5px;
-    left:15px;
+    top:10px;
+    left:10px;
 `
 
 const AnimationWrapper = styled.div `
