@@ -29,7 +29,7 @@ async function fetchGeolocation(searchTerm) {
         throw new Error(error)
     }
 
-    if (geolocation.error) throw new Error(geolocation.error); // this api handles not found this way
+    if (geolocation.error) throw new Error(geolocation.error.description); // this api handles not found this way
     return geolocation;
 }
 
