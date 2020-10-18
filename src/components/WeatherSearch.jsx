@@ -6,7 +6,7 @@ import { useFetchOnClick } from '../hooks/useFetchOnClick';
 import Loading from './Loading/Loading';
 import Forecast from './Forecast';
 import WeatherCard from './WeatherCard';
-import fetchFunction from '../weather-fetch-geo';
+import fetchFunction from '../handle-fetch';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -15,6 +15,7 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
+import Error from './Error/Error'
 
 const useStyles = makeStyles((theme) => ({
   locationBtn:{
@@ -94,7 +95,6 @@ const WeatherSearch = () => {
 
     function successGeo(pos) {
         setSearchTerm([pos.coords.latitude, pos.coords.longitude])
-        console.log('test')
     }
 
     function errorGeo(e) {
@@ -155,7 +155,9 @@ const WeatherSearch = () => {
                 </SwitchContainer>
 
                 {loading && <Loading/>}
-                {error && <h1>Error</h1>}
+                {error && <Error 
+                    error= {error}
+                />}
                 {data &&
                     <>
                         <WeatherCard
