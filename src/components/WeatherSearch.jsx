@@ -6,7 +6,7 @@ import { useFetchOnClick } from '../hooks/useFetchOnClick';
 import Loading from './Loading/Loading';
 import Forecast from './Forecast';
 import WeatherCard from './WeatherCard';
-import fetchFunction from '../weather-fetch-geo';
+import fetchFunction from '../handle-fetch';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -15,6 +15,7 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Paper from '@material-ui/core/Paper';
+import Error from './Error/Error'
 
 const useStyles = makeStyles((theme) => ({
   locationBtn:{
@@ -89,12 +90,11 @@ const WeatherSearch = () => {
     const [input, setInput] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [imperialUnit, setimperialUnit] = useState(true);
-    const [geolocation, setGeolocation] = useState('');
-    const { data, loading, error } = useFetchOnClick(fetchFunction, searchTerm, imperialUnit, geolocation);
+    const { data, loading, error } = useFetchOnClick(fetchFunction, searchTerm, imperialUnit);
     const classes = useStyles();
 
     function successGeo(pos) {
-        setGeolocation([pos.coords.latitude, pos.coords.longitude])
+        setSearchTerm([pos.coords.latitude, pos.coords.longitude])
     }
 
     function errorGeo(e) {
@@ -107,7 +107,6 @@ const WeatherSearch = () => {
 
     function handleGeolocationClick(){
         navigator.geolocation.getCurrentPosition(successGeo, errorGeo);
-        setSearchTerm('')
     }
 
     function handleUnitChange() {
@@ -131,7 +130,7 @@ const WeatherSearch = () => {
                         type="submit" 
                         className={classes.iconButton} 
                         aria-label="search"
-                        onClick={ () => {setSearchTerm(input); setGeolocation(null)} }
+                        onClick={ () => {setSearchTerm(input)} }
                     >
                         <SearchIcon />
                     </IconButton>
@@ -156,12 +155,14 @@ const WeatherSearch = () => {
                 </SwitchContainer>
 
                 {loading && <Loading/>}
-                {error && <h1>Error</h1>}
+                {error && <Error 
+                    error= {error}
+                />}
                 {data &&
                     <>
                         <WeatherCard
                             currentWeather = {data.currentWeather}
-                            location = {data.geolocationFetch}
+                            location = {data.geolocation}
                             imperialUnit = {imperialUnit}
                         />
                         <Forecast 
