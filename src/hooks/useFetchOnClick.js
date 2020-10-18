@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useRef } from "react";
+import { useReducer, useEffect } from "react";
 
 const initialState = {loading:false, data:null, error:null }
 
