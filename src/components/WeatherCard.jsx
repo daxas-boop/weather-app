@@ -9,6 +9,9 @@ const Container = styled(Paper) `
     min-width:350px;
     background-color: #0093E9;
     background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+    @media (max-width:768px){
+        min-width:320px;
+    }
 `
 
 const IconDescription = styled.h4 `
