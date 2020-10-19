@@ -38,9 +38,21 @@ async function fetchWeather(lat, lon, imperialUnit) {
     const APIKEY = '30d2d7664fe7b2ac7e54fdca4bc7f915';
     const unit = imperialUnit ? 'imperial' : 'metric';
 
-    const currentWeatherPromise = fetch (`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${APIKEY}`).then(r => r.json())
+    const currentWeatherPromise = fetch (`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${APIKEY}`)
+    .then((response) => {
+    if (response.ok) {
+        return response.json();
+    } else {
+        throw new Error('Something went wrong');
+    }})
 
-    const forecastPromise = fetch (`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${unit}&exclude=current,minutely,hourly&appid=${APIKEY}`).then(r => r.json())
+    const forecastPromise = fetch (`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${unit}&exclude=current,minutely,hourly&appid=${APIKEY}`)
+    .then((response) => {
+    if (response.ok) {
+        return response.json();
+    } else {
+        throw new Error('Something went wrong');
+    }})
 
     let currentWeather, forecast;
     try {
