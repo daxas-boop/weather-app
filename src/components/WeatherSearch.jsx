@@ -154,10 +154,8 @@ const WeatherSearch = () => {
                     <Grid item>C°</Grid>
                 </SwitchContainer>
 
-                {loading && <Loading/>}
-                {error && <Error 
-                    error= {error}
-                />}
+                {loading && <Loading />}
+                {error && <Error />}
                 {data &&
                     <>
                         <WeatherCard
