@@ -14,19 +14,10 @@ const ErrorText = styled.span `
     color:black;
 `
 
-const ErrorInfo = styled.p `
-    font-family:'Roboto';
-    font-size:14px;
-    margin:0 auto;
-    margin-bottom:15px;
-    color:black;
-`
-
-const Error = (error) => {
+const Error = () => {
     return (
         <>
             <ErrorText>Something went wrong</ErrorText>
-            <ErrorInfo>{error.error.message}</ErrorInfo>
             <ErrorImage src={errorIcon} alt='Error icon'></ErrorImage>
         </>
     )
