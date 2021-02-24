@@ -1,12 +1,8 @@
 import React from 'react';
-import WeatherSearch from './components/WeatherSearch';
+import Index from './pages/index';
 
 function App() {
-  return (
-    <div>
-      <WeatherSearch />
-    </div>
-  );
+  return <Index />;
 }
 
 export default App;

@@ -1,26 +1,16 @@
-import React from 'react'
+import React from 'react';
 import styled from '@emotion/styled';
-import errorIcon from './error_icon.png';
 
-const ErrorImage = styled.img `
-    width:300px;
-    margin:0 auto;
-`
-const ErrorText = styled.span `
-    font-family:'Roboto';
-    font-size:20px;
-    margin:0 auto;
-    margin-bottom:5px;
-    color:black;
-`
+const ErrorText = styled.span`
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+  color: white;
+`;
 
 const Error = () => {
-    return (
-        <>
-            <ErrorText>Something went wrong</ErrorText>
-            <ErrorImage src={errorIcon} alt='Error icon'></ErrorImage>
-        </>
-    )
-}
+  return <ErrorText>Something went wrong</ErrorText>;
+};
 
 export default Error;
