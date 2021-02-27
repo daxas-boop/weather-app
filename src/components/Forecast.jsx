@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     marginTop: 20,
   },
+  root: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
 }));
 
 const Container = styled(Grid)`
@@ -103,7 +106,7 @@ const Forecast = (props) => {
     >
       {forecast.daily.map((day) => (
         <Grid key={day.dt} item>
-          <Day elevation={3}>
+          <Day className={classes.root} elevation={3}>
             <DateDay>{getDate(day.dt)}</DateDay>
             <IconImage src={getIcon(day.weather[0].icon)} alt={day.weather[0].main} />
             <IconDescription>{capitalizeFirstLetter(day.weather[0].description)}</IconDescription>

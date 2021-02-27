@@ -13,6 +13,7 @@ const Container = styled.div`
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 20px;
+  text-align: center;
 `;
 
 export default function Index() {
@@ -61,7 +62,20 @@ export default function Index() {
             location={data.geolocation}
             imperialUnit={imperialUnit}
           />
+          <hr style={{ width: '85%', marginTop: '50px' }}></hr>
+          <h2 style={{ color: 'white', fontSize: '2.8rem' }}>Forecast</h2>
           <Forecast forecast={data.forecast} imperialUnit={imperialUnit} />
+          <footer style={{ color: 'white', margin: '15px 0' }}>
+            Data provided by{' '}
+            <a
+              style={{ color: 'lavender' }}
+              href="https://openweathermap.org/api"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              OpenWeather API
+            </a>
+          </footer>
         </>
       )}
     </Container>

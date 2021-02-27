@@ -25,13 +25,11 @@ const SearchForm = styled(Paper)`
   padding: 2px 4px;
   display: flex;
   align-items: center;
-  width: 400px;
+  width: 512px;
+  height: 44px;
   max-width: 100%;
   margin: auto;
   margin-top: 3rem;
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-  }
 `;
 
 export default function SearchBar(props) {

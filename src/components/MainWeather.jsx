@@ -1,8 +1,22 @@
 import React from 'react';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import styled from '@emotion/styled';
 import Paper from '@material-ui/core/Paper';
 import { DateTime } from 'luxon';
+import TurbinesIcon from '../icons/turbines.svg';
+import HumidityIcon from '../icons/humidity.svg';
+import CloudsIcon from '../icons/clouds.svg';
+import VisibilityIcon from '../icons/visibility.svg';
+import PressureIcon from '../icons/pressure.svg';
+
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    root: {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+  })
+);
 
 const SubHeader = styled.h3`
   color: white;
@@ -13,7 +27,7 @@ const SubHeader = styled.h3`
 
 const Header = styled.p`
   color: white;
-  font-size: 5rem;
+  font-size: 4.5rem;
   margin: 0.5em 0;
 `;
 
@@ -26,38 +40,71 @@ const Flex = styled.div`
 const SmallText = styled.p`
   text-align: center;
   color: grey;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
+  margin: 0 5px;
 `;
 
 const Box = styled(Paper)`
-  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   text-align: center;
+  margin: 20px 0px;
   background-color: rgba(255, 255, 255, 0.4);
-  padding: 10px;
+  padding: 20px 10px;
+  width: 100%;
+  max-width: 100%;
+  @media (min-width: 550px) {
+    width: 60%;
+  }
+`;
+
+const Hr = styled.p`
+  font-weight: 600;
+  margin: 0 10px;
+  margin-bottom: 6px;
+  color: white;
+  font-size: 0.8rem;
+`;
+
+const FlexCenter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+
+const Conditions = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Icon = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 const MainWeather = (props) => {
-  const { currentWeather, imperialUnit, geolocation } = props;
-  console.log(currentWeather);
+  const classes = useStyles();
+  const { currentWeather, geolocation } = props;
 
   const {
     name: city,
     sys: { country },
     main: { temp: temperature },
-    main: { feels_like },
     main: { pressure },
     main: { humidity },
-    main: { temp_min },
-    main: { temp_max },
     clouds: { all },
+    visibility,
+    wind: { speed },
   } = currentWeather;
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  // 03d.png
   const iconSrc = `https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`;
-  const unit = imperialUnit ? 'F' : 'C';
 
   return (
     <section>
@@ -73,7 +120,48 @@ const MainWeather = (props) => {
         {capitalizeFirstLetter(currentWeather.weather[0].description)}
       </SubHeader>
       <SmallText>Updated: {DateTime.now().toFormat('FF')}</SmallText>
-      <Box></Box>
+
+      <FlexCenter>
+        <Box className={classes.root}>
+          <Conditions>
+            <Icon src={HumidityIcon}></Icon>
+            <div>
+              <Hr>Humidity</Hr>
+              <SmallText>{humidity}%</SmallText>
+            </div>
+          </Conditions>
+          <Conditions>
+            <Icon src={CloudsIcon}></Icon>
+            <div>
+              <Hr>Clouds</Hr>
+              <SmallText>{all}%</SmallText>
+            </div>
+          </Conditions>
+          <Conditions>
+            <Icon src={VisibilityIcon}></Icon>
+            <div>
+              <Hr>Visibility</Hr>
+              <SmallText>{visibility} Km</SmallText>
+            </div>
+          </Conditions>
+        </Box>
+        <Box className={classes.root}>
+          <Conditions>
+            <Icon src={TurbinesIcon}></Icon>
+            <div>
+              <Hr>Wind</Hr>
+              <SmallText>{speed} Km/h</SmallText>
+            </div>
+          </Conditions>
+          <Conditions>
+            <Icon src={PressureIcon}></Icon>
+            <div>
+              <Hr>Pressure</Hr>
+              <SmallText>{pressure} hPa</SmallText>
+            </div>
+          </Conditions>
+        </Box>
+      </FlexCenter>
     </section>
   );
 };
