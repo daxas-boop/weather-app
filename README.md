@@ -2,7 +2,7 @@
 
 ## Overview 
 This project was created as part of the curriculum in Javascript Fullstack on The Odin Project.</br>
-Fun little application to get the weather. This was my first time working with API's on react, also my first implementation of a reducer. Besides some problems with the reducer it was a straightfoward and easy project to do.
+Fun little application to check the weather.
 
 ## Running the project locally
 1. Clone this project locally.
